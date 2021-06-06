@@ -22,7 +22,7 @@ class ModelNoHiddenLayer(Model):
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # no hidden layer
         # output layer with ReLu activation, 3 neuron for the classes
-        output_layer = tf.keras.layers.Dense(3, activation='relu', kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+        output_layer = tf.keras.layers.Dense(3, activation='softmax', kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
                                              name='output_layer')(input_layer)
 
         # define model
@@ -44,11 +44,12 @@ class ModelOneHiddenLayer(Model):
         # one hidden Fully Connected layer with ReLu activation
         hidden_layer = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                             kernel_regularizer=tf.keras.regularizers.l2(l2=0.01),
                                              name='hidden_layer')(input_layer)
         # batch normalization layer
         batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer')(hidden_layer)
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
-        output_layer = tf.keras.layers.Dense(3, activation='relu',
+        output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
                                              name='output_layer')(batch_norm_layer)
 
@@ -82,7 +83,7 @@ class ModelTwoHiddenLayers(Model):
         batch_norm_layer_2 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_2')(hidden_layer_2)
 
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
-        output_layer = tf.keras.layers.Dense(3, activation='relu',
+        output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='output_layer')(batch_norm_layer_2)
 
         # define model's inputs and outputs
@@ -118,7 +119,7 @@ class ModelThreeHiddenLayers(Model):
         batch_norm_layer_3 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_3')(hidden_layer_2)
 
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
-        output_layer = tf.keras.layers.Dense(3, activation='relu',
+        output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='output_layer')(batch_norm_layer_3)
 
         # define model's inputs and outputs

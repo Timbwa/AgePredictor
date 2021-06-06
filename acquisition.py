@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 def data_acquisition(folder_path='\Dataset'):
-    # _X represents data samples while _Y represents data one-hot class labels
+    # _X represents data samples while _Y represents data labels
     geoFeatTrainX = []
     geoFeatTrainY = []
 
@@ -94,6 +94,10 @@ def process_format(array):
     # can retrieve actual data using scaler.inverse_transform(array)
     array = StandardScaler().fit_transform(array)
 
+    # change labels to range 0-2 for training
+    labels[labels == 1] = 0
+    labels[labels == 2] = 1
+    labels[labels == 3] = 2
     # convert labels to one-hot values to be used with categorical_crossentropy loss function
     # number of classes for all feature sets is 3. (+1) cause of zero indexing and we don't have class 0
     # labels = to_categorical(labels, num_classes=(3 + 1))

@@ -18,7 +18,7 @@ def main():
     textFeatTestX, textFeatTestY = acquisition.data_acquisition()
 
     # create models with hidden layer(s) of num_neurons each
-    num_neurons = 50
+    num_neurons = 30
     model_no_hidden_layer = m.ModelNoHiddenLayer(num_neurons).create_model(geoFeatTrainX.shape)
     model_one_hidden_layer = m.ModelOneHiddenLayer(num_neurons).create_model(geoFeatTrainX.shape)
     model_two_hidden_layer = m.ModelTwoHiddenLayers(num_neurons).create_model(geoFeatTrainX.shape)
@@ -30,7 +30,7 @@ def main():
         Loss: Softmax(cross-entropy)
         learning-rate: (variable)1e-3
     """
-    learning_rate = 1e-6
+    learning_rate = 1e-3
     m.compile_model(model_no_hidden_layer, learning_rate=learning_rate)
     m.compile_model(model_one_hidden_layer, learning_rate=learning_rate)
     m.compile_model(model_two_hidden_layer, learning_rate=learning_rate)
