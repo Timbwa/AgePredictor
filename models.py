@@ -1,5 +1,8 @@
 import tensorflow as tf
 
+# seed for weight kernel initializer
+SEED = 777
+
 
 class Model:
     def __init__(self, num_neurons):
@@ -18,11 +21,12 @@ class ModelNoHiddenLayer(Model):
         # create Neural Architecture using Keras Functional API
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # no hidden layer
-        # output layer with ReLu activation, 1 neuron for the class
-        output_layer = tf.keras.layers.Dense(1, activation='relu', name='output_layer')(input_layer)
+        # output layer with ReLu activation, 3 neuron for the classes
+        output_layer = tf.keras.layers.Dense(3, activation='relu', kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                             name='output_layer')(input_layer)
 
         # define model
-        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
+        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='0_hidden_layer_model')
 
         # print summary of the model
         print(model.summary())
@@ -38,12 +42,18 @@ class ModelOneHiddenLayer(Model):
         # create Neural Architecture using Keras Functional API
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # one hidden Fully Connected layer with ReLu activation
-        hidden_layer = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer')(input_layer)
-        # Fully Connected output layer with ReLu activation, 1 neuron for the class
-        output_layer = tf.keras.layers.Dense(1, activation='relu', name='output_layer')(hidden_layer)
+        hidden_layer = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                             kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                             name='hidden_layer')(input_layer)
+        # batch normalization layer
+        batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer')(hidden_layer)
+        # Fully Connected output layer with ReLu activation, 3 neuron for the classes
+        output_layer = tf.keras.layers.Dense(3, activation='relu',
+                                             kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                             name='output_layer')(batch_norm_layer)
 
         # define model's inputs and outputs
-        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
+        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='1_hidden_layer_model')
 
         # print summary of the model
         print(model.summary())
@@ -59,13 +69,24 @@ class ModelTwoHiddenLayers(Model):
         # create Neural Architecture using Keras Functional API
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # two hidden Fully Connected layers with ReLu activation
-        hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer_1')(input_layer)
-        hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer_2')(hidden_layer_1)
-        # Fully Connected output layer with ReLu activation, 1 neuron for the class
-        output_layer = tf.keras.layers.Dense(1, activation='relu', name='output_layer')(hidden_layer_2)
+        hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='hidden_layer_1')(input_layer)
+        # batch normalization layer
+        batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer_1')(hidden_layer_1)
+
+        hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='hidden_layer_2')(
+            batch_norm_layer)
+
+        # batch normalization layer
+        batch_norm_layer_2 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_2')(hidden_layer_2)
+
+        # Fully Connected output layer with ReLu activation, 3 neuron for the classes
+        output_layer = tf.keras.layers.Dense(3, activation='relu',
+                                             kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='output_layer')(batch_norm_layer_2)
 
         # define model's inputs and outputs
-        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
+        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='2_hidden_layer_model')
 
         # print summary of the model
         print(model.summary())
@@ -81,14 +102,27 @@ class ModelThreeHiddenLayers(Model):
         # create Neural Architecture using Keras Functional API
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # three hidden Fully Connected layers with ReLu activation
-        hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer_1')(input_layer)
-        hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer_2')(hidden_layer_1)
-        hidden_layer_3 = tf.keras.layers.Dense(self.num_neurons, activation='relu', name='hidden_layer_3')(hidden_layer_2)
-        # Fully Connected output layer with ReLu activation, 1 neuron for the class
-        output_layer = tf.keras.layers.Dense(1, activation='relu', name='output_layer')(hidden_layer_3)
+        hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='hidden_layer_1')(input_layer)
+        # batch normalization layer
+        batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer_1')(hidden_layer_1)
+
+        hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='hidden_layer_2')(batch_norm_layer)
+        # batch normalization layer
+        batch_norm_layer_2 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_2')(hidden_layer_2)
+
+        hidden_layer_3 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='hidden_layer_3')(batch_norm_layer_2)
+        # batch normalization layer
+        batch_norm_layer_3 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_3')(hidden_layer_2)
+
+        # Fully Connected output layer with ReLu activation, 3 neuron for the classes
+        output_layer = tf.keras.layers.Dense(3, activation='relu',
+                                             kernel_initializer=tf.keras.initializers.he_normal(seed=SEED), name='output_layer')(batch_norm_layer_3)
 
         # define model's inputs and outputs
-        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
+        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='3_hidden_layer_model')
 
         # print summary of the model
         print(model.summary())
@@ -100,12 +134,12 @@ def compile_model(model: tf.keras.Model, learning_rate):
     """
     compiles the model with the following hyperparameters:
     optimizer: RMSprop
-    loss: Softmax(Cross-entropy)
+    loss: Softmax(Cross-entropy) -> CategoricalCrossentropy for multiclass labels and one_hot labels
     :param model: created keras model
     :param learning_rate:
     :return:
     """
-    compiled_model = model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=learning_rate, rho=0.9),
-                                   loss=tf.keras.losses.categorical_crossentropy())
-
-    return compiled_model
+    # compile model, returns None
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=learning_rate, rho=0.9),
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                  metrics=tf.keras.metrics.SparseCategoricalAccuracy())
