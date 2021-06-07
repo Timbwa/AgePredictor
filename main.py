@@ -22,11 +22,13 @@ def exponential_decay(init_learning_rate, num_steps):
     :param num_steps: number of epochs to reduce the learning rate by a factor of 10
     :return:
     """
+
     def exponential_decay_fn(epoch):
         new_learning_rate = init_learning_rate * 0.1 ** (epoch / num_steps)
         print(f'epoch: {epoch}\n'
               f'learning rate: {new_learning_rate}')
         return new_learning_rate
+
     return exponential_decay_fn
 
 
@@ -57,7 +59,7 @@ def train_experiment(model: m.tf.keras.Model, epochs, batch_size, train_x, train
         if steps is None:
             raise Exception('Please pass the `steps` parameter')
 
-        initial_learning_rate = 1
+        initial_learning_rate = 1.0
         exponential_decay_ = exponential_decay(initial_learning_rate, steps)
         callbacks = [
             # save the model at the end of each epoch(save_best_only=False) or save the model with best performance on
@@ -89,12 +91,12 @@ def train_experiment(model: m.tf.keras.Model, epochs, batch_size, train_x, train
               batch_size=batch_size, callbacks=callbacks, verbose=True)
 
 
-def check_learning_rates(feature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_y):
+def check_learning_rates(feature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_y, neurons):
     # create models with different number of layers and best number of neurons found in prior experiment
-    num_neuron_0 = 20
-    num_neuron_1 = 20
-    num_neuron_2 = 20
-    num_neuron_3 = 20
+    num_neuron_0 = neurons[0]
+    num_neuron_1 = neurons[1]
+    num_neuron_2 = neurons[2]
+    num_neuron_3 = neurons[3]
 
     model_no_hidden_layer = m.ModelNoHiddenLayer(num_neuron_0).create_model(feature_type.shape)
     model_one_hidden_layer = m.ModelOneHiddenLayer(num_neuron_1).create_model(feature_type.shape)
@@ -116,14 +118,14 @@ def check_learning_rates(feature_type: np.array, train_x, train_y, val_x, val_y,
             About learning rate:
             Our Approach involves initially using a large learning rate then reduce it exponentially until 
             training stops making fast progress. This is done by using Early Stopping and an initial learning rate of
-            10 that reduces by a factor of 10 every s=20 steps(epochs)
+            10 that reduces by a factor of 10 every s=20 steps(epochs). Pick the learning rate 
         """
         print(f'{print_equal()} Hidden Layers: {hidden_layers}{print_equal()}')
         # print summary of the model
         print(model.summary())
 
         # train with decaying learning rate. Learning rate reduces by a factor of 10 every 20 steps
-        train_experiment(model, epochs=150, learning_rate=1, batch_size=64, train_x=train_x, train_y=train_y,
+        train_experiment(model, epochs=150, learning_rate=None, batch_size=64, train_x=train_x, train_y=train_y,
                          val_x=val_x, val_y=val_y, exp_name=f'{folder_name}_hidden_layer{hidden_layers}', steps=20)
 
         # evaluate the model after training on the training set
@@ -183,18 +185,23 @@ def do_experiments(data):
     feature_types_test_Y = [geoFeatTestY, textFeatTestY, textFeatTestY]
 
     feature_names = ['Geometric Features', 'Texture Features', 'Geometric-Texture Features']
+    # best num of neurons for each type of feature
+    neurons = [[20, 100, 60, 100],
+               [60, 100., 40, 100],
+               [80, 80, 20, 40]]
     for index, feature_type in enumerate(feature_types_train_X):
         print(f'{print_equal()} Feature Type: {feature_names[index]}{print_equal()}')
 
         # search for number of neurons keeping other hyper-parameters constant
-        check_num_neurons(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
-                           feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
-                           feature_types_test_Y[index])
-
+        # check_num_neurons(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
+        #                    feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
+        #                    feature_types_test_Y[index])
+        if index != 1:
+            continue
         # use decaying learning rate to find out an optimum learning rate
-        # check_learning_rates(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
-        #                   feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
-        #                   feature_types_test_Y[index])
+        check_learning_rates(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
+                             feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
+                             feature_types_test_Y[index], neurons[index])
 
 
 def evaluate_model(model: m.tf.keras.Model, test_x, test_y):
