@@ -28,9 +28,6 @@ class ModelNoHiddenLayer(Model):
         # define model
         model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='0_hidden_layer_model')
 
-        # print summary of the model
-        print(model.summary())
-
         return model
 
 
@@ -44,7 +41,7 @@ class ModelOneHiddenLayer(Model):
         # one hidden Fully Connected layer with ReLu activation
         hidden_layer = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
-                                             kernel_regularizer=tf.keras.regularizers.l2(l2=0.01),
+                                             # kernel_regularizer=tf.keras.regularizers.l2(l2=0.01),
                                              name='hidden_layer')(input_layer)
         # batch normalization layer
         batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer')(hidden_layer)
@@ -55,9 +52,6 @@ class ModelOneHiddenLayer(Model):
 
         # define model's inputs and outputs
         model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='1_hidden_layer_model')
-
-        # print summary of the model
-        print(model.summary())
 
         return model
 
@@ -88,9 +82,6 @@ class ModelTwoHiddenLayers(Model):
 
         # define model's inputs and outputs
         model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='2_hidden_layer_model')
-
-        # print summary of the model
-        print(model.summary())
 
         return model
 
@@ -124,9 +115,6 @@ class ModelThreeHiddenLayers(Model):
 
         # define model's inputs and outputs
         model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer], name='3_hidden_layer_model')
-
-        # print summary of the model
-        print(model.summary())
 
         return model
 
