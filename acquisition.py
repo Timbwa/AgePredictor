@@ -54,7 +54,7 @@ def data_acquisition(folder_path='\Dataset'):
             geoFeatTrainX, geoFeatTrainY = process_format(geoFeatTrainX)
 
             # split with reproducible results on each function call
-            # here shuffle=2 ensures we have training data from all classes. Setting it to false will just split it,
+            # here shuffle=True ensures we have training data from all classes. Setting it to false will just split it,
             # top/bottom where top will have class 0 & 1 samples while bottom will have class 2 samples
             geoFeatTrainX, geoFeatValX, geoFeatTrainY, geoFeatValY = train_test_split(geoFeatTrainX, geoFeatTrainY,
                                                                                       test_size=0.2, shuffle=True,
@@ -85,6 +85,8 @@ def data_acquisition(folder_path='\Dataset'):
             textFeatTrainX, textFeatTrainY = process_format(textFeatTrainX)
 
             # split with reproducible results on each function call
+            # here shuffle=2 ensures we have training data from all classes. Setting it to false will just split it,
+            # top/bottom where top will have class 0 & 1 samples while bottom will have class 2 samples
             textFeatTrainX, textFeatValX, textFeatTrainY, textFeatValY = train_test_split(textFeatTrainX,
                                                                                           textFeatTrainY,
                                                                                           test_size=0.2, shuffle=True,
@@ -122,8 +124,5 @@ def process_format(array):
 
     # make into 1 column matrix
     labels = labels.reshape(-1, 1)
-    # convert labels to one-hot values to be used with categorical_crossentropy loss function
-    # number of classes for all feature sets is 3. (+1) cause of zero indexing and we don't have class 0
-    # labels = to_categorical(labels, num_classes=(3 + 1))
 
     return array, labels

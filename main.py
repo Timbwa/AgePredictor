@@ -38,7 +38,7 @@ def train_experiment(model: m.tf.keras.Model, epochs, learning_rate, batch_size,
     """
     To view the training curves through tensorboard run the following command on terminal:
 
-    $ tensorboard --logdir=C:\\Users\\PC\\CompVision\\AgePredictor\\training_logs --port=6006
+    $ tensorboard --logdir=C:\\Users\\PC\\CompVision\\AgePredictor\\training_logs\\experiment_name --port=6006
 
     make sure to replace --logdir path with absolute windows path(with single '\') of training_logs after training starts
     """
@@ -96,7 +96,7 @@ def do_experiments(data):
     feature_types_val_X = [geoFeatValX, textFeatValX, geoTextFeatValX]
     feature_types_val_Y = [geoFeatValY, textFeatValY, textFeatValY]
     feature_types_test_X = [geoFeatTestX, textFeatTestX, geoTextFeatTestX]
-    feature_types_test_Y = [geoFeatTestY,textFeatTestY, textFeatTestY]
+    feature_types_test_Y = [geoFeatTestY, textFeatTestY, textFeatTestY]
 
     feat_num = 0
     for index, feature_type in enumerate(feature_types_train_X):
