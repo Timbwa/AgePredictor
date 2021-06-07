@@ -44,7 +44,7 @@ def train_experiment(model: m.tf.keras.Model, epochs, learning_rate, batch_size,
     """
     # fit the model using num of epochs and batch_size
     model.fit(x=train_x, y=train_y, validation_data=(val_x, val_y), epochs=epochs,
-              batch_size=batch_size, callbacks=callbacks, verbose=True)
+              batch_size=batch_size, callbacks=callbacks, verbose=False)
 
 
 def check_num_neurons(feature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_y):
@@ -98,9 +98,9 @@ def do_experiments(data):
     feature_types_test_X = [geoFeatTestX, textFeatTestX, geoTextFeatTestX]
     feature_types_test_Y = [geoFeatTestY, textFeatTestY, textFeatTestY]
 
-    feat_num = 0
+    feature_names = ['Geometric Features', 'Texture Features', 'Geometric-Texture Features']
     for index, feature_type in enumerate(feature_types_train_X):
-        print(f'{print_equal()} Feature Type: {feat_num}{print_equal()}')
+        print(f'{print_equal()} Feature Type: {feature_names[index]}{print_equal()}')
 
         # search for number of neurons keeping other hyper-parameters constant
         check_num_neurons(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
