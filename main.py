@@ -47,6 +47,9 @@ def train_experiment(model: m.tf.keras.Model, epochs, learning_rate, batch_size,
               batch_size=batch_size, callbacks=callbacks, verbose=False)
 
 
+def check_linear_rates(fefeature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_yat):
+    rates = [1e-1, 1e-3, 1e-6]
+
 def check_num_neurons(feature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_y):
     num_neurons = [20, 40, 60, 80, 100]
 
