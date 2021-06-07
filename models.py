@@ -23,7 +23,10 @@ class ModelNoHiddenLayer(Model):
         # no hidden layer
         # output layer with ReLu activation, 3 neuron for the classes
         output_layer = tf.keras.layers.Dense(3, activation='softmax',
-                                             # kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             # use glorot normal cause of softmax
+                                             kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             # l2 regularization to avoid overfitting
+                                             kernel_regularizer=tf.keras.regularizers.l2(),
                                              name='output_layer')(input_layer)
 
         # define model
@@ -42,13 +45,16 @@ class ModelOneHiddenLayer(Model):
         # one hidden Fully Connected layer with ReLu activation
         hidden_layer = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                              kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
-                                             # kernel_regularizer=tf.keras.regularizers.l2(l2=0.01),
+                                             # l2 regularization to avoid overfitting
+                                             kernel_regularizer=tf.keras.regularizers.l2(),
                                              name='hidden_layer')(input_layer)
         # batch normalization layer
         batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer')(hidden_layer)
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
         output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             # l2 regularization to avoid overfitting
+                                             kernel_regularizer=tf.keras.regularizers.l2(),
                                              name='output_layer')(batch_norm_layer)
 
         # define model's inputs and outputs
@@ -67,12 +73,16 @@ class ModelTwoHiddenLayers(Model):
         # two hidden Fully Connected layers with ReLu activation
         hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                                kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               # l2 regularization to avoid overfitting
+                                               kernel_regularizer=tf.keras.regularizers.l2(),
                                                name='hidden_layer_1')(input_layer)
         # batch normalization layer
         batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer_1')(hidden_layer_1)
 
         hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                                kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               # l2 regularization to avoid overfitting
+                                               kernel_regularizer=tf.keras.regularizers.l2(),
                                                name='hidden_layer_2')(
             batch_norm_layer)
 
@@ -82,6 +92,8 @@ class ModelTwoHiddenLayers(Model):
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
         output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             # l2 regularization to avoid overfitting
+                                             kernel_regularizer=tf.keras.regularizers.l2(),
                                              name='output_layer')(batch_norm_layer_2)
 
         # define model's inputs and outputs
@@ -100,25 +112,33 @@ class ModelThreeHiddenLayers(Model):
         # three hidden Fully Connected layers with ReLu activation
         hidden_layer_1 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                                kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               # l2 regularization to avoid overfitting
+                                               kernel_regularizer=tf.keras.regularizers.l2(),
                                                name='hidden_layer_1')(input_layer)
         # batch normalization layer
         batch_norm_layer = tf.keras.layers.BatchNormalization(name='batch_norm_layer_1')(hidden_layer_1)
 
         hidden_layer_2 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
                                                kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               # l2 regularization to avoid overfitting
+                                               kernel_regularizer=tf.keras.regularizers.l2(),
                                                name='hidden_layer_2')(batch_norm_layer)
         # batch normalization layer
         batch_norm_layer_2 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_2')(hidden_layer_2)
 
         hidden_layer_3 = tf.keras.layers.Dense(self.num_neurons, activation='relu',
-                                               # kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
+                                               # l2 regularization to avoid overfitting
+                                               kernel_regularizer=tf.keras.regularizers.l2(),
                                                name='hidden_layer_3')(batch_norm_layer_2)
         # batch normalization layer
         batch_norm_layer_3 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_3')(hidden_layer_3)
 
         # Fully Connected output layer with ReLu activation, 3 neuron for the classes
         output_layer = tf.keras.layers.Dense(3, activation='softmax',
-                                             # kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
+                                             # l2 regularization to avoid overfitting
+                                             kernel_regularizer=tf.keras.regularizers.l2(),
                                              name='output_layer')(batch_norm_layer_3)
 
         # define model's inputs and outputs
