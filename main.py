@@ -212,6 +212,17 @@ def evaluate_model(model: m.tf.keras.Model, test_x, test_y):
     print(f'{print_equal()}')
 
 
+def train_test_best(feature_type: np.array, train_x, train_y, val_x, val_y, test_x, test_y):
+    num_neurons = 100
+    learning_rate = 1e-3
+    texture_model = m.ModelOneHiddenLayer(num_neurons).create_model(feature_type.shape)
+
+    train_experiment(texture_model, epochs=150, batch_size=64, train_x=train_x, train_y=train_y, val_x=val_x,
+                     val_y=val_y, exp_name='training_best', learning_rate=learning_rate)
+
+    evaluate_model(model=texture_model, test_x=test_x, test_y=test_y)
+
+
 def main():
     # do acquisition
     geoFeatTrainX, geoFeatTrainY, \
@@ -227,10 +238,14 @@ def main():
     geoTextFeatValX = np.concatenate((geoFeatValX, textFeatValX), axis=1)
     geoTextFeatTestX = np.concatenate((geoFeatTestX, textFeatTestX), axis=1)
 
-    # do experiments
-    do_experiments([geoFeatTrainX, geoFeatTrainY, geoFeatValX, geoFeatValY, geoFeatTestX, geoFeatTestY,
-                    textFeatTrainX, textFeatTrainY, textFeatValX, textFeatValY, textFeatTestX, textFeatTestY,
-                    geoTextFeatTrainX, geoTextFeatValX, geoTextFeatTestX])
+    # do experiments - uncomment to run the experiments
+    # do_experiments([geoFeatTrainX, geoFeatTrainY, geoFeatValX, geoFeatValY, geoFeatTestX, geoFeatTestY,
+    #                 textFeatTrainX, textFeatTrainY, textFeatValX, textFeatValY, textFeatTestX, textFeatTestY,
+    #                 geoTextFeatTrainX, geoTextFeatValX, geoTextFeatTestX])
+
+    # do training on best configuration with the best feature set
+    train_test_best(feature_type=textFeatTrainX, train_x=textFeatTrainX, train_y=textFeatTrainY, val_x=textFeatValX,
+               val_y=textFeatValY, test_x=textFeatTestX, test_y=textFeatTestY)
 
     print('Done')
 
