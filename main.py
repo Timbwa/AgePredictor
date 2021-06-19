@@ -186,9 +186,9 @@ def do_experiments(data):
 
     feature_names = ['Geometric Features', 'Texture Features', 'Geometric-Texture Features']
     # best num of neurons for each type of feature
-    neurons = [[20, 100, 60, 100],
-               [60, 100., 40, 100],
-               [80, 80, 20, 40]]
+    neurons = [[0, 100, 60, 100],
+               [0, 100., 40, 100],
+               [0, 80, 20, 40]]
     for index, feature_type in enumerate(feature_types_train_X):
         print(f'{print_equal()} Feature Type: {feature_names[index]}{print_equal()}')
 
@@ -196,8 +196,8 @@ def do_experiments(data):
         # check_num_neurons(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
         #                    feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
         #                    feature_types_test_Y[index])
-        if index != 1:
-            continue
+        # if index != 1:
+        #     continue
         # use decaying learning rate to find out an optimum learning rate
         check_learning_rates(feature_type, feature_types_train_X[index], feature_types_train_Y[index],
                              feature_types_val_X[index], feature_types_val_Y[index], feature_types_test_X[index],
@@ -245,7 +245,7 @@ def main():
 
     # do training on best configuration with the best feature set
     train_test_best(feature_type=textFeatTrainX, train_x=textFeatTrainX, train_y=textFeatTrainY, val_x=textFeatValX,
-               val_y=textFeatValY, test_x=textFeatTestX, test_y=textFeatTestY)
+                    val_y=textFeatValY, test_x=textFeatTestX, test_y=textFeatTestY)
 
     print('Done')
 

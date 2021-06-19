@@ -21,7 +21,7 @@ class ModelNoHiddenLayer(Model):
         # create Neural Architecture using Keras Functional API
         input_layer = tf.keras.Input(shape=data_shape[1:], name='input_layer')
         # no hidden layer
-        # output layer with ReLu activation, 3 neuron for the classes
+        # output layer with softmax activation, 3 neuron for the classes
         output_layer = tf.keras.layers.Dense(3, activation='softmax',
                                              # use glorot normal cause of softmax
                                              kernel_initializer=tf.keras.initializers.glorot_normal(seed=SEED),
@@ -83,8 +83,7 @@ class ModelTwoHiddenLayers(Model):
                                                kernel_initializer=tf.keras.initializers.he_normal(seed=SEED),
                                                # l2 regularization to avoid overfitting
                                                kernel_regularizer=tf.keras.regularizers.l2(),
-                                               name='hidden_layer_2')(
-            batch_norm_layer)
+                                               name='hidden_layer_2')(batch_norm_layer)
 
         # batch normalization layer
         batch_norm_layer_2 = tf.keras.layers.BatchNormalization(name='batch_norm_layer_2')(hidden_layer_2)
